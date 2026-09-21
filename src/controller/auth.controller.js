@@ -2,6 +2,8 @@ import User from "../models/register.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { fileUpload } from "../storage/storage.js";
+import dotnev from "dotenv";
+dotnev.config();
 
 const createJwtToken = (payload, secret) => {
   return jwt.sign({ userId: payload }, secret, {
@@ -24,7 +26,8 @@ export const register = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
+      domain:process.env.COOKIE_DOMAIN,
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
