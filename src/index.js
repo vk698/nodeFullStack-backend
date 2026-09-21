@@ -19,7 +19,7 @@ app.use(cors({
 
 }));
 app.get("/",async(req,res)=>{
-    res.status(200).json({message:"success"})
+    res.status(200).json({message:"success,.,.,.,.,.,.,.,.,.,.,."})
 });
 
 app.use("/auth",userAuthRoutes);
