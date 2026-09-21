@@ -51,7 +51,7 @@ export const deleteNotes = async(req,res)=>{
     const params = req.params.id;
     const data = req.body;
   
-     const deleteNotes = await Notes.findOneAndDelete(params)
+     const deleteNotes = await Notes.findByIdAndDelete(params)
      res.status(200).json({message:"notes dleted"})
   } catch (error) {
     res.status(500).json({message:"api not working"})

@@ -5,7 +5,7 @@ import { fileUpload } from "../storage/storage.js";
 
 const createJwtToken = (payload, secret) => {
   return jwt.sign({ userId: payload }, secret, {
-    expiresIn: "1h",
+    expiresIn: "7d",
   });
 };
 
@@ -20,16 +20,12 @@ export const register = async (req, res) => {
     const newUser = await User.create({ email, password: newPassword });
 
     const token = await createJwtToken(newUser._id, process.env.JWT_SECRET);
-    // const token = await jwt.sign(
-    //   { userId: newUser._id },
-    //   process.env.JWT_SECRET,
-    //   { expiresIn: "1h" },
-    // );
+   
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      expires: new Date(Date.now() + 3600000),
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     res.status(201).json({ message: "User registered successfully", token });
@@ -58,9 +54,9 @@ export const login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      expires: new Date(Date.now() + 3600000),
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     res.status(200).json({ message: "Login Successfull", user: user });
