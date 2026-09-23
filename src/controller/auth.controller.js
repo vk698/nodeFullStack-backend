@@ -40,6 +40,9 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    
+    console.log("COOKIE_DOMAIN",process.env.COOKIE_DOMAIN);
+
     const user = await User.findOne({ email });
 
     console.log("DATA",user._id)
@@ -57,10 +60,10 @@ export const login = async (req, res) => {
  
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       domain:process.env.COOKIE_DOMAIN,
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      path: "/",
     });
 
     res.status(200).json({ message: "Login Successfull", user: user });
