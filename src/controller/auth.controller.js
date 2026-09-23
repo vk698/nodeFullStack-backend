@@ -22,12 +22,12 @@ export const register = async (req, res) => {
     const newUser = await User.create({ email, password: newPassword });
 
     const token = await createJwtToken(newUser._id, process.env.JWT_SECRET);
-   
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      domain:process.env.COOKIE_DOMAIN,
+      domain: process.env.COOKIE_DOMAIN,
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
@@ -40,12 +40,12 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    console.log("COOKIE_DOMAIN",process.env.COOKIE_DOMAIN);
+
+    console.log("COOKIE_DOMAIN", process.env.COOKIE_DOMAIN);
 
     const user = await User.findOne({ email });
 
-    console.log("DATA",user._id)
+    console.log("DATA", user._id);
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -57,17 +57,16 @@ export const login = async (req, res) => {
     }
 
     const token = await createJwtToken(user._id, process.env.JWT_SECRET);
- 
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      domain:process.env.COOKIE_DOMAIN,
-      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ message: "Login Successfull", user: user });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error",error });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
