@@ -3,7 +3,9 @@ import Notes from "../models/notes.model.js";
 export const createNotes = async (req, res) => {
   try {
     const { Title, description } = req.body;
+    const user_id = req.user.userId;
     const newNotes = new Notes({
+      user: user_id,
       Title: Title,
       description: description,
     });
@@ -17,7 +19,12 @@ export const createNotes = async (req, res) => {
 
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Notes.find();
+    console.log("Working");
+    const user_id = req.user.userId;
+    console.log("ID", user_id);
+    const notes = await Notes.find({ user: user_id }).sort({ createdAt: -1 });
+
+    console.log("notes", notes);
 
     res.status(200).json(notes);
   } catch (error) {
