@@ -1,7 +1,7 @@
 import Router from "express";
 
 import {upload} from "../storage/storage.js"
-import { login, register } from "../controller/auth.controller.js";
+import { login, logout, register } from "../controller/auth.controller.js";
 import { findProfile, profile } from "../controller/profile.controller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -11,4 +11,5 @@ router.post("/register",register);
 router.post("/login",login);
 router.post("/profile",authMiddleware,upload.single("image"),profile)
 router.get("/findProfile",authMiddleware,findProfile)
+router.post("/logout",logout)
 export default router;

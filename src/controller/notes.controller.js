@@ -20,17 +20,23 @@ export const createNotes = async (req, res) => {
 export const getNotes = async (req, res) => {
   try {
     console.log("Working");
+
     const user_id = req.user.userId;
     console.log("ID", user_id);
-    const notes = await Notes.find({ user: user_id }).sort({ createdAt: -1 });
+
+    const notes = await Notes.find({ user: user_id }).sort({
+      createdAt: -1,
+    });
 
     console.log("notes", notes);
 
     res.status(200).json(notes);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: "notes server error",
-      error: error,
+      error: error.message,
     });
   }
 };
