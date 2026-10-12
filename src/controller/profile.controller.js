@@ -51,7 +51,7 @@ export const updateProfile = async (req, res) => {
     const data = req.body;
     console.log("Data", data);
 
-    fileUpload();
+    // fileUpload();
 
     const isProfileExists = await Profile.findOne({ _id: params });
 
